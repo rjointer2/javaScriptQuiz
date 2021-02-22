@@ -1,0 +1,67 @@
+*::before,::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* BASE CSS VARIABLES */
+
+:root {
+
+    /* FONT SIZES */
+
+    --font-size-3: 2em;
+    --font-size-2: 0.9em;
+    --font-size-1: 0.5em;
+
+    /* COLOR PALETTE */
+
+    --prim-color: #A65644;
+    --secondary-color: #5CACF2;
+    --box-color: #79BAF2;
+    --box-2-color: #F2B263;
+    --white-color: #FFFFFF;
+
+    /* MARGIN */
+
+}
+
+main,
+header {
+    display: flex;
+    justify-content: center;
+    padding-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+section {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+main {
+    flex-direction: column;
+    color: var(--white-color)
+}
+
+main .question_box {
+    padding: 1em;
+    border: 1px solid var(--prim-color);
+    border-radius: 2px;
+    background-color: var(--box-2-color)
+}
+
+main .answer_box {
+    padding: 1em;
+    border: 1px solid var(--secondary-color);
+    border-top: none;
+    border-top-left-radius: none;
+    border-top-left-radius: none;
+    border-radius: 2px;
+    background-color: var(--box-color);
+}
