@@ -5,6 +5,20 @@ let timer = document.querySelector('.timer');
 let questionBox = document.querySelector('.question_box');
 let answerBox = document.querySelector('.answer_box');
 
+let highScoresBtn = document.createElement('button');
+let highScoreBtnText = document.createTextNode('View High Scores');
+
+answerBox.appendChild(highScoresBtn).appendChild(highScoreBtnText)
+
+highScoresBtn.addEventListener('click', ()=> {
+    questionBox.innerHTML = "";
+    answerBox.innerHTML = "";
+
+    questionBox.innerHTML = "";
+    answerBox.innerHTML = localStorage.getItem("name") + localStorage.getItem("score");
+})
+
+
 let time = 90
 
 /* BUTTONS */
@@ -12,6 +26,7 @@ let time = 90
 let starBtn = document.querySelector('.startBtn').addEventListener('click', () => {
     console.log("init Quiz")
     init()
+    questionBox.innerHTML = question1.question
 })
 
 let init = () => {
@@ -45,33 +60,67 @@ let timerFunction = (seconds) => {
 
 let counter = 0;
 
-let nextQuestion = () => {
+let pagination = () => {
     counter++
     console.log(counter)
 
     if(counter === 1) {
         console.log("Next Question Inited")
         question2.buildQuestion()
+        questionBox.innerHTML = question2.question;
     }
 
     if(counter === 2) {
         console.log("Next Question Inited")
         question3.buildQuestion()
+        questionBox.innerHTML = question3.question;
     }
 
     if(counter === 3) {
         console.log("quiz completed");
-        answerBox.innerHTML = "The quiz is done"
+        score.innerHTML = time
+        points = time
+        
+
+        answerBox.innerHTML = "The quiz is done";
+
+        questionBox.innerHTML = "Your score is " + time + " Enter your name here ";
+
+        let form = document.createElement('input');
+        form.setAttribute("type", "text");
+        questionBox.appendChild(form)
+
+        let formBtnText = document.createTextNode("Submit");
+        let formBtn = document.createElement("button");
+        formBtn.appendChild(formBtnText);
+        formBtn.addEventListener('click', () => {
+            localStorage.setItem("name", form.value)
+            localStorage.setItem("score", points)
+        })
+
+        questionBox.appendChild(formBtn);
+
+
+
 
         /* RESET COUNTER TO 0 */
+
+        time = 0;
+
+        
+        
+
+
+
     }
     return counter
 }
 
+/* SCOREBOARD */
 
-
-
-
+       /*  let storeName = localStorage.setItem("name", input);
+        let storeScore = localStorage.setItem("score", time);
+ */
 
 
 /* QUESTION OBJECT CONSTRUCTOR */
@@ -86,6 +135,7 @@ class QuestionObject {
     }
 
     buildQuestion() {
+        questionBox.innerHTML = "";
         answerBox.innerHTML = "";
 
         /* CREATE BUTTON */
@@ -113,7 +163,7 @@ class QuestionObject {
         ul.appendChild(choice1).appendChild(radioBtnA).addEventListener("click", () => {
             let option = "A";
             this.isCorrect(option);
-            nextQuestion()
+            pagination()
         })    
 
         let choice2 = document.createElement("li");
@@ -122,7 +172,7 @@ class QuestionObject {
         ul.appendChild(choice2).appendChild(radioBtnB).addEventListener("click", () => {
             let option = "B"
             this.isCorrect(option)
-            nextQuestion()
+            pagination()
         })  
 
         let choice3 = document.createElement("li");
@@ -131,7 +181,7 @@ class QuestionObject {
         ul.appendChild(choice3).appendChild(radioBtnC).addEventListener("click", () => {
             let option = "C"
             this.isCorrect(option)
-            nextQuestion()
+            pagination()
         })  
     }
 
@@ -157,7 +207,7 @@ let question1 = new QuestionObject(
     "The Script from the Play Java",
     "A Programming Language",
     "B"
-    );
+);
 
 let question2 = new QuestionObject(
     "What does DOM mean?",
@@ -165,7 +215,7 @@ let question2 = new QuestionObject(
     "Domino's Pizza",
     "Don't Overuse Models",
     "A"
-    );
+);
 
 let question3 = new QuestionObject(
     "What is the KISS rule in programming?",
@@ -173,7 +223,7 @@ let question3 = new QuestionObject(
     "Keep It Super Serious",
     "Keep It Stupid Simple",
     "C"
-    );
+);
 
 
 
