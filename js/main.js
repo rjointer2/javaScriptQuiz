@@ -5,21 +5,11 @@ let timer = document.querySelector('.timer');
 let questionBox = document.querySelector('.question_box');
 let answerBox = document.querySelector('.answer_box');
 
+/* HIGH SCORE SELECTORS */
+
 let highScoresBtn = document.createElement('button');
 let highScoreBtnText = document.createTextNode('View High Scores');
-
-answerBox.appendChild(highScoresBtn).appendChild(highScoreBtnText)
-
-highScoresBtn.addEventListener('click', ()=> {
-    questionBox.innerHTML = "";
-    answerBox.innerHTML = "";
-
-    questionBox.innerHTML = "";
-    answerBox.innerHTML = localStorage.getItem("name") + localStorage.getItem("score");
-})
-
-
-let time = 90
+answerBox.appendChild(highScoresBtn).appendChild(highScoreBtnText);
 
 /* BUTTONS */
 
@@ -28,6 +18,22 @@ let starBtn = document.querySelector('.startBtn').addEventListener('click', () =
     init()
     questionBox.innerHTML = question1.question
 })
+
+highScoresBtn.addEventListener('click', ()=> {
+    questionBox.innerHTML = "";
+    answerBox.innerHTML = "";
+
+    questionBox.innerHTML = "Most Recent Score! Can you do better?";
+    answerBox.innerHTML = localStorage.getItem("name") + " " +localStorage.getItem("score");
+})
+
+
+
+/* TIME / COUNTER */
+
+let time = 90
+
+/* STARTS QUIZ */
 
 let init = () => {
     question1.buildQuestion()
@@ -50,10 +56,6 @@ let timerFunction = (seconds) => {
         }
     }, 1000)
 } 
-
-
-
-
 
 
 /* INIT NEXT QUESTION  */
@@ -82,16 +84,16 @@ let pagination = () => {
         points = time
         
 
-        answerBox.innerHTML = "The quiz is done";
-
+        answerBox.innerHTML = "The quiz is done ";
         questionBox.innerHTML = "Your score is " + time + " Enter your name here ";
 
-        let form = document.createElement('input');
-        form.setAttribute("type", "text");
-        questionBox.appendChild(form)
+        /* FORM BUTTON AND SELECTORS */
 
+        let form = document.createElement('input');
         let formBtnText = document.createTextNode("Submit");
         let formBtn = document.createElement("button");
+        form.setAttribute("type", "text");
+        questionBox.appendChild(form)
         formBtn.appendChild(formBtnText);
         formBtn.addEventListener('click', () => {
             localStorage.setItem("name", form.value)
@@ -100,28 +102,21 @@ let pagination = () => {
 
         questionBox.appendChild(formBtn);
 
+        /* RESET SELECTORS AND BUTTONS */
 
+        let resetBtnText = document.createTextNode('Restart Quiz');
+        let resetBtn = document.createElement('button')
+        resetBtn.appendChild(resetBtnText)
 
-
-        /* RESET COUNTER TO 0 */
+        answerBox.appendChild(resetBtn)
+        resetBtn.addEventListener('click', () => {
+            location.reload()
+        })
 
         time = 0;
-
-        
-        
-
-
-
     }
     return counter
 }
-
-/* SCOREBOARD */
-
-       /*  let storeName = localStorage.setItem("name", input);
-        let storeScore = localStorage.setItem("score", time);
- */
-
 
 /* QUESTION OBJECT CONSTRUCTOR */
 
@@ -194,11 +189,6 @@ class QuestionObject {
     }
 }
 
-
-
-
-
-
  /* QUESTIONS */
 
 let question1 = new QuestionObject(
@@ -206,7 +196,7 @@ let question1 = new QuestionObject(
     "A Coffee Brand",
     "The Script from the Play Java",
     "A Programming Language",
-    "B"
+    "C"
 );
 
 let question2 = new QuestionObject(
@@ -224,6 +214,7 @@ let question3 = new QuestionObject(
     "Keep It Stupid Simple",
     "C"
 );
+
 
 
 
