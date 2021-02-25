@@ -4,217 +4,201 @@ let score = document.querySelector('.score');
 let timer = document.querySelector('.timer');
 let questionBox = document.querySelector('.question_box');
 let answerBox = document.querySelector('.answer_box');
-
-/* HIGH SCORE SELECTORS */
-
-let highScoresBtn = document.createElement('button');
-let highScoreBtnText = document.createTextNode('View High Scores');
-answerBox.appendChild(highScoresBtn).appendChild(highScoreBtnText);
-
-/* BUTTONS */
-
-let starBtn = document.querySelector('.startBtn').addEventListener('click', () => {
-    console.log("init Quiz")
-    init()
-    questionBox.innerHTML = question1.question
-})
-
-highScoresBtn.addEventListener('click', ()=> {
-    questionBox.innerHTML = "";
-    answerBox.innerHTML = "";
-
-    questionBox.innerHTML = "Most Recent Score! Can you do better?";
-    answerBox.innerHTML = localStorage.getItem("name") + " " +localStorage.getItem("score");
-})
-
-
-
-/* TIME / COUNTER */
-
-let time = 90
-
-/* STARTS QUIZ */
-
-let init = () => {
-    question1.buildQuestion()
-    timerFunction(time)
-}
-
-
-
-
-/* TIMER AND TIMER FUNCTION */
-
-let timerFunction = (seconds) => {
-    setTimeout(() => {
-        if (seconds > 0) {
-            time--
-            timer.innerHTML = time
-            timerFunction(time);
-        } else {
-            timer.innerHTML = "Time is up!"
-        }
-    }, 1000)
-} 
-
-
-/* INIT NEXT QUESTION  */
+let init = document.querySelector('.startBtn');
 
 let counter = 0;
 
-let pagination = () => {
-    counter++
-    console.log(counter)
+/* TIMER & TIMER FUNCTION */
 
-    if(counter === 1) {
-        console.log("Next Question Inited")
-        question2.buildQuestion()
-        questionBox.innerHTML = question2.question;
-    }
+let time = 90;
 
-    if(counter === 2) {
-        console.log("Next Question Inited")
-        question3.buildQuestion()
-        questionBox.innerHTML = question3.question;
-    }
-
-    if(counter === 3) {
-        console.log("quiz completed");
-        score.innerHTML = time
-        points = time
-        
-
-        answerBox.innerHTML = "The quiz is done ";
-        questionBox.innerHTML = "Your score is " + time + " Enter your name here ";
-
-        /* FORM BUTTON AND SELECTORS */
-
-        let form = document.createElement('input');
-        let formBtnText = document.createTextNode("Submit");
-        let formBtn = document.createElement("button");
-        form.setAttribute("type", "text");
-        questionBox.appendChild(form)
-        formBtn.appendChild(formBtnText);
-        formBtn.addEventListener('click', () => {
-            localStorage.setItem("name", form.value)
-            localStorage.setItem("score", points)
-        })
-
-        questionBox.appendChild(formBtn);
-
-        /* RESET SELECTORS AND BUTTONS */
-
-        let resetBtnText = document.createTextNode('Restart Quiz');
-        let resetBtn = document.createElement('button')
-        resetBtn.appendChild(resetBtnText)
-
-        answerBox.appendChild(resetBtn)
-        resetBtn.addEventListener('click', () => {
-            location.reload()
-        })
-
-        time = 0;
-    }
-    return counter
+let timerFunction = (t) => {
+    setTimeout(() => {
+        if( t > 0 ) {
+            time--
+            timer.innerHTML = time
+            timerFunction(time)
+        } else {
+            timer.innerHTML = "Time is up!"
+        }
+    }, 1000);
 }
 
-/* QUESTION OBJECT CONSTRUCTOR */
+
+/* QUESTION DATA STRUCTURE */
 
 class QuestionObject {
-    constructor(question, answerA, answerB, answerC, correctAnswer) {
-        this.question = question;
-        this.answerA = answerA;
-        this.answerB = answerB;
-        this.answerC = answerC;
-        this.correctAnswer = correctAnswer;
+    constructor(a, ...b) {
+        this.a = a;
+        this.b = b;
     }
 
-    buildQuestion() {
-        questionBox.innerHTML = "";
-        answerBox.innerHTML = "";
+    construct() {
 
-        /* CREATE BUTTON */
+        let question = this.a;
+        let liQuestion = document.createElement('li')
+        let liQuestionText = document.createTextNode(question);
+        liQuestion.appendChild(liQuestionText)
 
-        let radioBtnA = document.createElement("input");
-        radioBtnA.setAttribute("type", "radio");
+        questionBox.appendChild(liQuestion)
+        
+        for( let i in this.b) {
+            let question = this.a;
+            let liQuestion = document.createElement('li')
+            let liQuestionText = document.createTextNode(question);
+            liQuestion.appendChild(liQuestionText)
 
-        let radioBtnB = document.createElement("input");
-        radioBtnB.setAttribute("type", "radio");
+            let status = this.b[i].correct;
 
-        let radioBtnC = document.createElement("input");
-        radioBtnC.setAttribute("type", "radio");
+            const liText = document.createTextNode(this.b[i].answer)
+            const li = document.createElement('li');
+            li.appendChild(liText);
 
-        /* CREATE UL */
+            const btn = document.createElement('input');
+            btn.type = "radio";
+            btn.value = status;
 
-        let ul = document.createElement("ul");
-        ul.setAttribute("class", "list");
-        answerBox.appendChild(ul)
+            btn.addEventListener('click', (e) => {
+                pagination()
+                if(btn.value == "true" ) {
+                    console.log('correct')
+                } else {
+                    console.log('incorrect')
+                }
+            })
 
-        /* CREATE LI */
-
-        let choice1 = document.createElement("li");
-        let answer1 = document.createTextNode(this.answerA);
-        choice1.appendChild(answer1);
-        ul.appendChild(choice1).appendChild(radioBtnA).addEventListener("click", () => {
-            let option = "A";
-            this.isCorrect(option);
-            pagination()
-        })    
-
-        let choice2 = document.createElement("li");
-        let answer2 = document.createTextNode(this.answerB);
-        choice2.appendChild(answer2);
-        ul.appendChild(choice2).appendChild(radioBtnB).addEventListener("click", () => {
-            let option = "B"
-            this.isCorrect(option)
-            pagination()
-        })  
-
-        let choice3 = document.createElement("li");
-        let answer3 = document.createTextNode(this.answerC);
-        choice3.appendChild(answer3);
-        ul.appendChild(choice3).appendChild(radioBtnC).addEventListener("click", () => {
-            let option = "C"
-            this.isCorrect(option)
-            pagination()
-        })  
-    }
-
-    isCorrect(ans) {
-        if(this.correctAnswer === ans) {
+            li.appendChild(btn)
+            answerBox.appendChild(li)
             
-        } else {
-            time += -20
         }
+        
     }
 }
 
- /* QUESTIONS */
+let question1 = new QuestionObject("What is Javascript? ",
+    {
+        "answer": "A Coffee Brand ",
+        "correct": false
+    },
+    {
+        "answer": "The Script from the Play Java  ",
+        "correct": false
+    },
+    {
+        "answer": "A Programming Language ",
+        "correct": true
+    }
+)
 
-let question1 = new QuestionObject(
-    "What is Javascript?",
-    "A Coffee Brand",
-    "The Script from the Play Java",
-    "A Programming Language",
-    "C"
-);
+let question2 = new QuestionObject("What does DOM mean? ",
+    {
+        "answer": "Document Object Model ",
+        "correct": true
+    },
+    {
+        "answer": "Domino's Pizza ",
+        "correct": false
+    },
+    {
+        "answer": "Don't Overuse Models ",
+        "correct": false
+    }
+)
 
-let question2 = new QuestionObject(
-    "What does DOM mean?",
-    "Document Object Model",
-    "Domino's Pizza",
-    "Don't Overuse Models",
-    "A"
-);
+let question3 = new QuestionObject("What is the KISS rule in programming? ",
+    {
+        "answer": "Kiss someone ",
+        "correct": false
+    },
+    {
+        "answer": "Keep It Super Serious  ",
+        "correct": false
+    },
+    {
+        "answer": "Keep It Stupid Simple ",
+        "correct": true
+    }
+)
 
-let question3 = new QuestionObject(
-    "What is the KISS rule in programming?",
-    "Kiss someone",
-    "Keep It Super Serious",
-    "Keep It Stupid Simple",
-    "C"
-);
+let question4 = new QuestionObject("What is a lexical enviroment? ",
+    {
+        "answer": "A environment for a lexus ",
+        "correct": false
+    },
+    {
+        "answer": "the js engine construct that holds identifier-variable mapping",
+        "correct": true
+    },
+    {
+        "answer": "the environment the let variable is written ",
+        "correct": false
+    }
+)
+
+let question5 = new QuestionObject('What does 2 + "2" equal in Javascript?',
+    {
+        "answer": "22 ",
+        "correct": false
+    },
+    {
+        "answer": "NaN ",
+        "correct": false
+    },
+    {
+        "answer": "4 ",
+        "correct": true
+    }
+)
+
+let question6 = new QuestionObject("What is the difference between let and var? ",
+    {
+        "answer": "it let's you deicde it's variable ",
+        "correct": false
+    },
+    {
+        "answer": "Trick Question! There isn't no question. ",
+        "correct": false
+    },
+    {
+        "answer": "var is globally scope and let isn't ",
+        "correct": true
+    }
+)
 
 
 
+/* INIT QUIZ */
+let clearPage = () => {
+    questionBox.innerHTML = '';
+    answerBox.innerHTML = '';
+}
 
+init.addEventListener('click', () => {
+    clearPage()
+    timerFunction(time)
+    question1.construct()
+})
+
+/* PAGINATION */
+
+let arr = [question1,
+    question2,
+    question3,
+    question4,
+    question5,
+    question6
+]
+
+let pagination = () => {
+
+    if( counter > counter - 1 ) {
+        counter++
+        clearPage()
+        arr[counter].construct()
+        if( counter === 5 ) {
+            console.log("test")
+            questionBox.innerHTML = "Congratz you finished the quiz! Here's your score! " + time
+            answerBox.innerHTML = "great"
+        }
+    } 
+}
