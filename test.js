@@ -7,12 +7,29 @@ class QuestionObject {
     }
 
     construct() {
-        console.log(this.a, this.b)
+        
         for( let i in this.b) {
             let status = this.b[i].correct;
-            let item = '<li>' + this.b[i].answer + '<input type="button" value="' + i + '"' + status +'</li>'
-            page.innerHTML += item
-            console.log(status)
+
+            const liText = document.createTextNode(this.b[i].answer)
+            const li = document.createElement('li');
+            li.appendChild(liText);
+
+            const btn = document.createElement('input');
+            btn.type = "radio";
+            btn.value = status;
+
+            btn.addEventListener('click', (e) => {
+                if(btn.value == "true" ) {
+                    console.log('correct')
+                } else {
+                    console.log('incorrect')
+                }
+            })
+
+            li.appendChild(btn)
+            page.appendChild(li)
+            
         }
         
     }
@@ -35,4 +52,3 @@ let question1 = new QuestionObject("What is Javascript? ",
 )
 
 console.log(question1.construct())
-
