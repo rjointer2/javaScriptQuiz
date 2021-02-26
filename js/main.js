@@ -31,6 +31,7 @@ class QuestionObject {
     constructor(a, ...b) {
         this.a = a;
         this.b = b;
+
     }
 
     construct() {
@@ -166,6 +167,7 @@ let question6 = new QuestionObject("What is the difference between let and var? 
         "answer": "var is globally scope and let isn't ",
         "correct": true
     }
+    
 )
 
 
@@ -239,7 +241,7 @@ let pagination = () => {
                 questionBox.innerHTML = "Congratz you finished the quiz! Here's your score! " + time + " <br><br>Javscript is tough and you will meet some tough paths. It's important to keep trying and learning!<br><br> Add your name to save your score! " 
             }
     
-            if( time < 20 ) {
+            if( time > 20 ) {
                 questionBox.innerHTML = "Congratz you finished the quiz! Here's your score! " + time + " <br><br>Javascript is tough, but you just have to practice!<br><br> Add your name to save your score! " 
             }
     
