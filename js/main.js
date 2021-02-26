@@ -261,7 +261,8 @@ let pagination = () => {
             answerBox.innerHTML = "Reset the Quiz to score higher or view the curent high score "
             save()
 
-            timer.innerHTML = "Time's up!"
+            score.innerHTML = time
+            time = 1
         }
 
     },800)
